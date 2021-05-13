@@ -36,11 +36,13 @@ func main() {
 	print("****************************************************\n")
 	print("Members of the SIAFE Group of the State of Alagoas (Brazil)\n")
 	users, _ := tools.GetMembersFromGroup(jiraClient, jiraConfig.JiraUserGroup)
+	page := tools.StartDriver()
 	for i, u := range *users {
 		println(strconv.Itoa(i+1), u.DisplayName, u.AccountID)
-		emailAddress := tools.ScrapEmailAddress(u.AccountID)
+		emailAddress := tools.ScrapEmailAddress(page, u.AccountID)
 		println("***************************")
 		println(emailAddress)
 		println("***************************")
 	}
+	tools.StopDriver()
 }
