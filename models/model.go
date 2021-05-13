@@ -10,3 +10,21 @@ type MembersFromGroup struct {
 	MaxResults int         `json:"maxResults" structs:"maxResults"`
 	Total      int         `json:"total" structs:"total"`
 }
+
+type ConfigType int
+
+const (
+	JIRA ConfigType = iota
+	GMAIL
+)
+
+type Config struct {
+	JiraUsername    string
+	JiraApiToken    string
+	JiraAddress     string
+	JiraUserGroup   string
+	JiraProfilePage string
+	DomainParts     string
+	AdminEmail      string
+	AdminPassword   string
+}

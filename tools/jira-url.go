@@ -1,6 +1,8 @@
 package tools
 
 import (
+	"Atlassian/config"
+	"Atlassian/models"
 	"context"
 	"encoding/base64"
 	"encoding/json"
@@ -18,7 +20,10 @@ import (
 	"google.golang.org/api/gmail/v1"
 )
 
+var gmailConfig models.Config
+
 func ScrapEmailAddress(accountId string) (emailAddress string) {
+
 	driver := agouti.ChromeDriver()
 
 	if err := driver.Start(); err != nil {
@@ -29,8 +34,9 @@ func ScrapEmailAddress(accountId string) (emailAddress string) {
 	if err != nil {
 		log.Fatal("Failed to open page:", err)
 	}
-
-	navTo := "https://admin.atlassian.com/s/71b9ec9d-c849-4a4d-bdbf-99f47a2cb432/users/" + accountId
+	jiraConfig := config.ReadConfig(models.JIRA)
+	gmailConfig := config.ReadConfig(models.GMAIL)
+	navTo := jiraConfig.JiraProfilePage + accountId
 	if err := page.Navigate(navTo); err != nil {
 		log.Fatal("Failed to navigate:", err)
 	}
@@ -39,14 +45,14 @@ func ScrapEmailAddress(accountId string) (emailAddress string) {
 	oauthButton := page.FindByID("google-auth-button")
 	oauthButton.Click()
 	email := page.FindByID("identifierId")
-	email.Fill("masaru@logusinfo.com.br")
+	email.Fill(gmailConfig.AdminEmail)
 	time.Sleep(2 * time.Second)
 	b := page.FindByButton("Próxima")
 	println(b.Text())
 	b.Click()
 	time.Sleep(5 * time.Second)
 	password := page.FindByName("password")
-	password.Fill("mohashi212")
+	password.Fill(gmailConfig.AdminPassword)
 	b = page.FindByButton("Próxima")
 	println(b.Text())
 	b.Click()
@@ -66,7 +72,8 @@ func ScrapEmailAddress(accountId string) (emailAddress string) {
 	//println(html)
 	println("***************************")
 	time.Sleep(10 * time.Second)
-	emailAddress = getEmailAddress(page, "@sefaz", "@seplag", "@seplan", "@tj", "@cge", "@previdencia", "@itec")
+	domainParts := strings.Split(gmailConfig.DomainParts, ",")
+	emailAddress = getEmailAddress(page, domainParts...)
 	if err := driver.Stop(); err != nil {
 		log.Fatal("Failed to close pages and stop WebDriver:", err)
 	}
@@ -78,23 +85,21 @@ func getEmailAddress(page *agouti.Page, domains ...string) (emailAddress string)
 	for _, d := range domains {
 		ini := strings.Index(html, d)
 		if ini == -1 {
-			println("NÃO Encontrei " + d + " !!!")
+			println("I din't found " + d + " !!!")
 			continue
 		}
 		left, right := html[:ini], html[ini:]
 		closingLeft := strings.LastIndex(left, ">")
 		openingRight := strings.Index(right, "<")
 		emailAddress = left[closingLeft+1:] + right[:openingRight]
-		println("Encontrei " + emailAddress + "!!!")
+		println("I found " + emailAddress + "!!!")
 		break
 	}
 	return
 }
 
 func GetVerificationCode() (response string) {
-	// ID do cliente: 332249568404-jsmejccmln1r59larbv3puuhpt7jdgmi.apps.googleusercontent.com
-	// Chave secreta do cliente: Wgxiv9MgK0AnkWj8iaa3YEbU
-	b, err := ioutil.ReadFile("credentials.json")
+	b, err := ioutil.ReadFile("config/credentials.json")
 	if err != nil {
 		log.Fatalf("Unable to read client secret file: %v", err)
 	}
@@ -164,7 +169,7 @@ func getClient(config *oauth2.Config) *http.Client {
 	// The file token.json stores the user's access and refresh tokens, and is
 	// created automatically when the authorization flow completes for the first
 	// time.
-	tokFile := "token.json"
+	tokFile := "config/token.json"
 	tok, err := tokenFromFile(tokFile)
 	if err != nil {
 		tok = getTokenFromWeb(config)

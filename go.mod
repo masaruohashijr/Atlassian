@@ -3,6 +3,7 @@ module Atlassian
 go 1.16
 
 require (
+	github.com/BurntSushi/toml v0.3.1
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/onsi/gomega v1.12.0 // indirect

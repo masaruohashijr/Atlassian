@@ -1,6 +1,8 @@
 package main
 
 import (
+	"Atlassian/config"
+	"Atlassian/models"
 	"Atlassian/tools"
 	"fmt"
 	"strconv"
@@ -9,12 +11,15 @@ import (
 )
 
 func main() {
+
+	jiraConfig := config.ReadConfig(models.JIRA)
+
 	tp := jira.BasicAuthTransport{
-		Username: "masaru@logusinfo.com.br",
-		Password: "VdfB0aXt6Ov7w22lKcdM8AEB",
+		Username: jiraConfig.JiraUsername,
+		Password: jiraConfig.JiraApiToken,
 	}
 
-	jiraClient, err := jira.NewClient(tp.Client(), "https://logusinfo.atlassian.net/")
+	jiraClient, err := jira.NewClient(tp.Client(), jiraConfig.JiraAddress)
 	if err != nil {
 		print(err.Error())
 	}

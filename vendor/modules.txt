@@ -1,5 +1,8 @@
 # cloud.google.com/go v0.81.0
 cloud.google.com/go/compute/metadata
+# github.com/BurntSushi/toml v0.3.1
+## explicit
+github.com/BurntSushi/toml
 # github.com/fatih/structs v1.1.0
 ## explicit
 github.com/fatih/structs
