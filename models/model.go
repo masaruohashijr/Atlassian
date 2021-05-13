@@ -24,6 +24,8 @@ type Config struct {
 	JiraAddress     string
 	JiraUserGroup   string
 	JiraProfilePage string
+	JiraNextButton  string
+	JiraUseCaseJQL  string
 	DomainParts     string
 	AdminEmail      string
 	AdminPassword   string
