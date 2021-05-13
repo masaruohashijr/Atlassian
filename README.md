@@ -21,7 +21,7 @@ Only through the browser, the administrator can still view the email addresses o
 - Integration between desktop application written in Go and Jira Software (Cloud) using Token api.
 - Integration between desktop application written in Go and Jira Service Management (Cloud) using api Token.
 - Gmail API service consumer client.
-- Web crawler to open a page and navitage throgh authentication, verification code and scraping the email address.
+- Web crawler to open a page and navigate through authentication, verification code and scraping the email address.
 - Fill in the email address and password of the Jira Admin.
 - Wait for the verification code sent to the Admin inbox.
 - Fill in the verification code into the confirmation form of Jira.
