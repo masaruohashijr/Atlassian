@@ -30,9 +30,12 @@ func CreateIssues(jiraClient jira.Client, issues []jira.Issue) {
 		println(i.Fields.Reporter.DisplayName)
 		//println(i.Fields.Created)
 		newIssue.Fields.Description = i.Fields.Description
-		//newIssue.Fields.Comments = i.Fields.Comments
+		newIssue.Fields.Comments = i.Fields.Comments
 		newIssue.Fields.Project.Key = c.SDeskConfig.SDeskProjectKey
 		newIssue.Fields.Type.Name = c.SDeskConfig.SDeskIssueTypeName
 		newIssue, _, _ := jiraClient.Issue.Create(newIssue)
+		for _, c := range i.Fields.Comments.Comments {
+			jiraClient.Issue.AddComment(newIssue.ID, c)
+		}
 	}
 }

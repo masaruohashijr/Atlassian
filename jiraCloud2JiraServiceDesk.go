@@ -26,7 +26,7 @@ func main() {
 	fmt.Printf("Usecase: Running a JQL query '%s'\n", jql)
 	issues, _ := hd.GetIssuesByJql(*jiraClient, jql)
 
-	/*jiraUsers, _ := hd.GetMembersFromGroup(jiraClient, c.JiraConfig.JiraUserGroup)
+	jiraUsers, _ := hd.GetMembersFromGroup(jiraClient, c.JiraConfig.JiraUserGroup)
 	var user m.User
 	var users []m.User
 	page := hd.StartDriver()
@@ -37,11 +37,11 @@ func main() {
 		user.EmailAddress = emailAddress
 		users = append(users, user)
 	}
-	hd.StopDriver()*/
-	//hd.ReportIssues(issues)
-	//hd.ReportUsers(users)
+	hd.StopDriver()
+	hd.ReportIssues(issues)
+	hd.ReportUsers(users)
 	// as rollback test -> clear all issues of the destination project.
-	//hd.RemoveIssues(*jiraClient, issues)
+	hd.RemoveIssues(*jiraClient, issues)
 	// create issues if not already exists another in the destination project with the same title / subject.
 	hd.CreateIssues(*jiraClient, issues)
 	// create organization if not already exists with the same name.
