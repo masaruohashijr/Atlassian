@@ -1,48 +1,49 @@
 package main
 
 import (
-	"Atlassian/config"
-	"Atlassian/models"
-	"Atlassian/tools"
+	c "Atlassian/config"
+	hd "Atlassian/handlers"
 	"fmt"
-	"strconv"
 
 	"gopkg.in/andygrunwald/go-jira.v1"
 )
 
 func main() {
 
-	jiraConfig := config.ReadConfig(models.JIRA)
+	c.InitConfig()
 
 	tp := jira.BasicAuthTransport{
-		Username: jiraConfig.JiraUsername,
-		Password: jiraConfig.JiraApiToken,
+		Username: c.JiraConfig.JiraUsername,
+		Password: c.JiraConfig.JiraApiToken,
 	}
 
-	jiraClient, err := jira.NewClient(tp.Client(), jiraConfig.JiraAddress)
+	jiraClient, err := jira.NewClient(tp.Client(), c.JiraConfig.JiraAddress)
 	if err != nil {
 		print(err.Error())
 	}
 
-	print("****************************************************\n")
-	print("Unresolved issues for the SIAFE Alagoas project\n")
-	jql := jiraConfig.JiraUseCaseJQL
+	jql := c.JiraConfig.JiraUseCaseJQL
 	fmt.Printf("Usecase: Running a JQL query '%s'\n", jql)
-	issues, _ := tools.GetIssuesByJql(*jiraClient, jql)
-	for i := 0; i < len(issues); i++ {
-		print(issues[i].Key + " - " + issues[i].Fields.Summary + "\n")
-	}
+	issues, _ := hd.GetIssuesByJql(*jiraClient, jql)
 
-	print("****************************************************\n")
-	print("Members of the SIAFE Group of the State of Alagoas (Brazil)\n")
-	users, _ := tools.GetMembersFromGroup(jiraClient, jiraConfig.JiraUserGroup)
-	page := tools.StartDriver()
-	for i, u := range *users {
-		println(strconv.Itoa(i+1), u.DisplayName, u.AccountID)
-		emailAddress := tools.ScrapEmailAddress(page, u.AccountID)
-		println("***************************")
-		println(emailAddress)
-		println("***************************")
+	/*jiraUsers, _ := hd.GetMembersFromGroup(jiraClient, c.JiraConfig.JiraUserGroup)
+	var user m.User
+	var users []m.User
+	page := hd.StartDriver()
+	for _, u := range *jiraUsers {
+		emailAddress := hd.ScrapEmailAddress(page, u.AccountID)
+		user.AccountID = u.AccountID
+		user.DisplayName = u.DisplayName
+		user.EmailAddress = emailAddress
+		users = append(users, user)
 	}
-	tools.StopDriver()
+	hd.StopDriver()*/
+	//hd.ReportIssues(issues)
+	//hd.ReportUsers(users)
+	// as rollback test -> clear all issues of the destination project.
+	//hd.RemoveIssues(*jiraClient, issues)
+	// create issues if not already exists another in the destination project with the same title / subject.
+	hd.CreateIssues(*jiraClient, issues)
+	// create organization if not already exists with the same name.
+	// add users to organization if not already exists another in the destination organization.
 }
