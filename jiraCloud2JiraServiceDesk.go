@@ -3,6 +3,7 @@ package main
 import (
 	c "Atlassian/config"
 	hd "Atlassian/handlers"
+	m "Atlassian/models"
 	"fmt"
 
 	"gopkg.in/andygrunwald/go-jira.v1"
