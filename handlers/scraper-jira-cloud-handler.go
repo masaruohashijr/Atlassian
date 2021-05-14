@@ -2,11 +2,13 @@ package handlers
 
 import (
 	c "Atlassian/config"
+	m "Atlassian/models"
 	"log"
 	"strings"
 	"time"
 
 	"github.com/sclevine/agouti"
+	"gopkg.in/andygrunwald/go-jira.v1"
 )
 
 var driver *agouti.WebDriver
@@ -68,6 +70,23 @@ func ScrapEmailAddress(page *agouti.Page, accountId string) (emailAddress string
 	domainParts := strings.Split(c.GmailConfig.GmailDomainParts, ",")
 	emailAddress = getEmailAddress(page, domainParts...)
 	return emailAddress
+}
+
+func ScrapEmailAddresses(jiraUsers *[]jira.User, accountId string) {
+	var user m.User
+	var users []m.User
+	usersMap := make(map[string]m.User)
+	page := StartDriver()
+	for _, u := range *jiraUsers {
+		emailAddress := ScrapEmailAddress(page, u.AccountID)
+		user.AccountID = u.AccountID
+		user.DisplayName = u.DisplayName
+		user.EmailAddress = emailAddress
+		users = append(users, user)
+		usersMap[u.AccountID] = user
+	}
+	StopDriver()
+	ReportUsers(users)
 }
 
 func getEmailAddress(page *agouti.Page, domains ...string) (emailAddress string) {

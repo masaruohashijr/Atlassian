@@ -11,8 +11,11 @@ func GetIssuesByJql(client jira.Client, searchString string) ([]jira.Issue, erro
 		MaxResults: 1000, // Max results can go up to 1000
 		StartAt:    last,
 		Expand:     "renderedBody",
-		Fields: []string{"summary", "description", "comment",
-			"author", "created", "Creator", "worklog", "reporter", "status"},
+		Fields: []string{
+			"summary", "description", "reporter",
+			"status", "assignee", "author",
+			"created", "Creator", "comment",
+			"worklog"},
 	}
 
 	chunk, resp, err := client.Issue.Search(searchString, opt)

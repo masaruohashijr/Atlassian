@@ -23,19 +23,20 @@ const (
 )
 
 type Config struct {
-	JiraUsername       string
-	JiraApiToken       string
-	JiraAddress        string
-	JiraUserGroup      string
-	JiraProfilePage    string
-	JiraNextButton     string
-	JiraUseCaseJQL     string
-	JiraSearchBySubj   string
-	GmailDomainParts   string
-	GmailAdminEmail    string
-	GmailAdminPassword string
-	SDeskIssueTypeName string
-	SDeskProjectKey    string
+	JiraUsername          string
+	JiraApiToken          string
+	JiraAddress           string
+	JiraCustomerUserGroup string
+	JiraProviderUserGroup string
+	JiraProfilePage       string
+	JiraNextButton        string
+	JiraUseCaseJQL        string
+	JiraSearchBySubj      string
+	GmailDomainParts      string
+	GmailAdminEmail       string
+	GmailAdminPassword    string
+	SDeskIssueTypeName    string
+	SDeskProjectKey       string
 }
 
 type User struct {
