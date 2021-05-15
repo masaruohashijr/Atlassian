@@ -3,7 +3,7 @@ package handlers
 import (
 	"fmt"
 
-	jira "gopkg.in/andygrunwald/go-jira.v1"
+	jira "Atlassian/jiracloud"
 )
 
 func GetProjects(jiraClient *jira.Client, accountId string) (*[]jira.Project, error) {

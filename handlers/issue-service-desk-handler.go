@@ -4,7 +4,7 @@ import (
 	c "Atlassian/config"
 	m "Atlassian/models"
 
-	"gopkg.in/andygrunwald/go-jira.v1"
+	jira "Atlassian/jiracloud"
 )
 
 func RemoveIssues(jiraClient jira.Client) {

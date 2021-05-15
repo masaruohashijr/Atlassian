@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"gopkg.in/andygrunwald/go-jira.v1"
+	jira "Atlassian/jiracloud"
 )
 
 func GetIssuesByJql(client jira.Client, searchString string) ([]jira.Issue, error) {

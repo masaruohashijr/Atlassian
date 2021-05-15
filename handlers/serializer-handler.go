@@ -1,6 +1,6 @@
 package handlers
 
-import jira "gopkg.in/andygrunwald/go-jira.v1"
+import jira "Atlassian/jiracloud"
 
 func SaveIssues(issues []jira.Issue) {
 

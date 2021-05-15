@@ -7,8 +7,9 @@ import (
 	"strings"
 	"time"
 
+	jira "Atlassian/jiracloud"
+
 	"github.com/sclevine/agouti"
-	"gopkg.in/andygrunwald/go-jira.v1"
 )
 
 var driver *agouti.WebDriver

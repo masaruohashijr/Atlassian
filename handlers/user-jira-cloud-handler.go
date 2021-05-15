@@ -1,9 +1,10 @@
 package handlers
 
 import (
+	m "Atlassian/models"
 	"fmt"
 
-	jira "gopkg.in/andygrunwald/go-jira.v1"
+	jira "Atlassian/jiracloud"
 )
 
 func GetUserByAccountId(jiraClient *jira.Client, accountId string) (*jira.User, error) {
@@ -15,4 +16,8 @@ func GetUserByAccountId(jiraClient *jira.Client, accountId string) (*jira.User, 
 		print(err.Error())
 	}
 	return user, err
+}
+
+func SaveUsers(allUsers []m.User) {
+
 }
