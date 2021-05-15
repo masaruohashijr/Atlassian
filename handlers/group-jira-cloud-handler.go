@@ -4,7 +4,7 @@ import (
 	"Atlassian/models"
 	"fmt"
 
-	jira "Atlassian/jiracloud"
+	jira "Atlassian/jira"
 )
 
 func GetMembersFromGroup(jiraClient *jira.Client, groupname string) (*[]jira.User, error) {

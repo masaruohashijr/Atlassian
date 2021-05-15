@@ -1170,3 +1170,8 @@ func (c ChangelogHistory) CreatedTime() (time.Time, error) {
 	t, err := time.Parse("2006-01-02T15:04:05.999-0700", c.Created)
 	return t, err
 }
+
+type EntityProperty struct {
+	Key   string      `json:"key"`
+	Value interface{} `json:"value"`
+}

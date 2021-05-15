@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strconv"
 
-	jira "Atlassian/jiracloud"
+	jira "Atlassian/jira"
 )
 
 func ReportIssues(issues []jira.Issue) {

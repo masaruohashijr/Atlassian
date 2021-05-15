@@ -1,6 +1,6 @@
 package handlers
 
-import jira "Atlassian/jiracloud"
+import jira "Atlassian/jira"
 
 func SaveIssues(issues []jira.Issue) {
 

@@ -4,7 +4,7 @@ import (
 	m "Atlassian/models"
 	"fmt"
 
-	jira "Atlassian/jiracloud"
+	jira "Atlassian/jira"
 )
 
 func GetUserByAccountId(jiraClient *jira.Client, accountId string) (*jira.User, error) {

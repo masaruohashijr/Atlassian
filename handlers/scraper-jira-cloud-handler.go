@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	jira "Atlassian/jiracloud"
+	jira "Atlassian/jira"
 
 	"github.com/sclevine/agouti"
 )

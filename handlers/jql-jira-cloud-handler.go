@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	jira "Atlassian/jiracloud"
+	jira "Atlassian/jira"
 )
 
 func GetIssuesByJql(client jira.Client, searchString string) ([]jira.Issue, error) {

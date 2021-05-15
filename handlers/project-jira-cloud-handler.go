@@ -3,7 +3,7 @@ package handlers
 import (
 	"fmt"
 
-	jira "Atlassian/jiracloud"
+	jira "Atlassian/jira"
 )
 
 func GetProjects(jiraClient *jira.Client, accountId string) (*[]jira.Project, error) {

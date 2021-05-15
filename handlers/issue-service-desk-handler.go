@@ -4,7 +4,7 @@ import (
 	c "Atlassian/config"
 	m "Atlassian/models"
 
-	jira "Atlassian/jiracloud"
+	jira "Atlassian/jira"
 )
 
 func RemoveIssues(jiraClient jira.Client) {

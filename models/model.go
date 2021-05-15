@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	jira "Atlassian/jiracloud"
+	jira "Atlassian/jira"
 )
 
 type MembersFromGroup struct {
@@ -31,6 +31,7 @@ type Config struct {
 	JiraNextButton     string
 	JiraUseCaseJQL     string
 	JiraSearchBySubj   string
+	JiraOrganizationId string
 	GmailDomainParts   string
 	GmailAdminEmail    string
 	GmailAdminPassword string

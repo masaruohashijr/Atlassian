@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"strings"
 
-	jira "Atlassian/jiracloud"
+	jira "Atlassian/jira"
 )
 
 func main() {
@@ -61,6 +61,6 @@ func main() {
 	// hd.CreateIssues(*jiraClient, issues, usersMap)
 	// create organization if not already exists with the same name.
 	// add users to organization if not already exists another in the destination organization.
-	hd.UpdateTitleAndCustomField(jiraClient, allIssues)
-	//hd.AddUserToOrganization(*jiraClient)
+	// hd.UpdateCustomFieldOriginKey(jiraClient, allIssues)
+	hd.AddUserToOrganization(*jiraClient, allUsers)
 }

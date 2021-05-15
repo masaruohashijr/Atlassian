@@ -2,6 +2,7 @@ package jira
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -42,6 +43,7 @@ type Client struct {
 	StatusCategory   *StatusCategoryService
 	Filter           *FilterService
 	Role             *RoleService
+	Organization     *OrganizationService
 	PermissionScheme *PermissionSchemeService
 }
 
@@ -86,6 +88,7 @@ func NewClient(httpClient *http.Client, baseURL string) (*Client, error) {
 	c.StatusCategory = &StatusCategoryService{client: c}
 	c.Filter = &FilterService{client: c}
 	c.Role = &RoleService{client: c}
+	c.Organization = &OrganizationService{client: c}
 	c.PermissionScheme = &PermissionSchemeService{client: c}
 
 	return c, nil
@@ -457,4 +460,55 @@ func cloneRequest(r *http.Request) *http.Request {
 		r2.Header[k] = append([]string(nil), s...)
 	}
 	return r2
+}
+
+// NewRequestWithContext creates an API request.
+// A relative URL can be provided in urlStr, in which case it is resolved relative to the baseURL of the Client.
+// If specified, the value pointed to by body is JSON encoded and included as the request body.
+func (c *Client) NewRequestWithContext(ctx context.Context, method, urlStr string, body interface{}) (*http.Request, error) {
+	rel, err := url.Parse(urlStr)
+	if err != nil {
+		return nil, err
+	}
+	// Relative URLs should be specified without a preceding slash since baseURL will have the trailing slash
+	rel.Path = strings.TrimLeft(rel.Path, "/")
+
+	u := c.baseURL.ResolveReference(rel)
+
+	var buf io.ReadWriter
+	if body != nil {
+		buf = new(bytes.Buffer)
+		err = json.NewEncoder(buf).Encode(body)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	req, err := newRequestWithContext(ctx, method, u.String(), buf)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+
+	// Set authentication information
+	if c.Authentication.authType == authTypeSession {
+		// Set session cookie if there is one
+		if c.session != nil {
+			for _, cookie := range c.session.Cookies {
+				req.AddCookie(cookie)
+			}
+		}
+	} else if c.Authentication.authType == authTypeBasic {
+		// Set basic auth information
+		if c.Authentication.username != "" {
+			req.SetBasicAuth(c.Authentication.username, c.Authentication.password)
+		}
+	}
+
+	return req, nil
+}
+
+func newRequestWithContext(ctx context.Context, method, url string, body io.Reader) (*http.Request, error) {
+	return http.NewRequestWithContext(ctx, method, url, body)
 }
